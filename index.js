@@ -13,8 +13,7 @@ app.use(express.static("public"));
 
 //connect to MongoDb
 const port1 = 2000;
-const uri =
-	"mongodb+srv://amn_sdqi:1234@projects.g12m2.mongodb.net/blog-site?retryWrites=true&w=majority&appName=Projects";
+const uri = "<paste the connection URI>";
 mongoose
 	.connect(uri)
 	.then((result) =>
