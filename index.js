@@ -1,17 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-const Blog = require("./models/blog");
+const blogRoutes = require("./routes/blog.routes");
 
 // express app
 const app = express();
-
 // setting up view engine
-
 app.set("view engine", "ejs");
 
-const port1 = 2000;
+//serving file statically
+app.use(express.static("public"));
+
 //connect to MongoDb
+const port1 = 2000;
 const uri =
 	"mongodb+srv://amn_sdqi:1234@projects.g12m2.mongodb.net/blog-site?retryWrites=true&w=majority&appName=Projects";
 mongoose
@@ -23,21 +24,20 @@ mongoose
 	)
 	.catch((err) => console.log(err));
 
-//serving file statically
-app.use(express.static("public"));
-
 //To convert & access the form data into human readable format back and fort
 // if not used it you can not access the submited form data
 app.use(express.urlencoded({ extended: true }));
 
 //setting up logs
 app.use(morgan("dev"));
-
-// Listening to port from localhost
+app.use((req, res, next) => {
+	res.locals.path = req.path;
+	next();
+});
 
 //get request for Home page
 app.get("/", (req, res) => {
-	res.redirect("allBlogs");
+	res.redirect("/blogs");
 });
 
 //get request for about page
@@ -46,40 +46,10 @@ app.get("/about", (req, res) => {
 	res.render("about", { title: "About" });
 });
 
-//get request for create page
-
-app.get("/createBlog", (req, res) => {
-	res.statusCode = 200;
-	res.render("creatBlog", { title: "Create" });
-});
-
-app.get("/allBlogs", (req, res) => {
-	Blog.find()
-		.then((result) => {
-			res.render("home", { title: "All-Blogs", blogs: result });
-		})
-		.catch((err) => {
-			console.log(err);
-		});
-});
-
-//post request for blogs
-app.post("/blogs", (req, res) => {
-	const blog = new Blog(req.body);
-
-	blog
-		.save()
-		.then((result) => {
-			res.redirect("/");
-		})
-		.catch((err) => {
-			res.send(err);
-		});
-});
+app.use("/blogs", blogRoutes);
 
 //get request for 404 ntfnd page
 app.use((req, res) => {
-	console.log("File Not Found");
 	res.statusCode = 404;
 	res.render("404", { title: "404 Error" });
 });

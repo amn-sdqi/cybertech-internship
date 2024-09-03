@@ -3,7 +3,7 @@
 body {
     max-width: 1200px;
     margin: 20px auto;
-    padding: 0 20px;
+    padding: 5px 20px;
     font-family: 'Noto Serif', serif;
     max-width: 1200px;
     background-color: #383838;
@@ -36,6 +36,12 @@ nav ul {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+}
+
+
+.Blog {
+    margin: 10px;
+    padding: 10px;
 }
 
 nav li {
@@ -92,6 +98,7 @@ h3 {
 
 }
 
+
 .create-blog label {
     display: block;
     margin-top: 24px;
@@ -104,7 +111,8 @@ textarea {
     border-radius: 6px;
 }
 
-.create-blog button {
+.create-blog button,
+.detailBlog button {
     margin-top: 20px;
     background: crimson;
     color: white;
